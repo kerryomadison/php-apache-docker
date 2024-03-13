@@ -1,0 +1,13 @@
+version: '3'
+services:
+  php-apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    #add environment variables if needed
+    #environment:
+    # -variable_name=value
