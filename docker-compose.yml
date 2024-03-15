@@ -11,3 +11,16 @@ services:
     #add environment variables if needed
     #environment:
     # -variable_name=value
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=quotesdb
+      - DATABASE_PASSWORD=Babylon6$
+      - DATABASE_PORT= 5432
+      - DATABASE_USERNAME= postgres
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB: quotesdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Babylon6$
+      
