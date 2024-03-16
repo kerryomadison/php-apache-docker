@@ -8,19 +8,16 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
-    #add environment variables if needed
-    #environment:
-    # -variable_name=value
     environment:
       - DATABASE_HOST=db
+      - DATABASE_PORT=10000
       - DATABASE_NAME=quotesdb
+      - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=Babylon6$
-      - DATABASE_PORT= 5432
-      - DATABASE_USERNAME= postgres
   db:
     image: postgres:latest
     environment:
-      - POSTGRES_DB: quotesdb
+      - POSTGRES_DB=quotesdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Babylon6$
-      
+
