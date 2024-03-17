@@ -1,0 +1,11 @@
+# Disable directory browsing
+Options -Indexes
+
+# Rewrite base
+RewriteEngine On
+RewriteBase /api/
+
+# Rewrite for index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
