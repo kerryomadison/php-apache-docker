@@ -28,19 +28,8 @@ $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
 // Depending on the request method, perform different actions
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        if ($id !== null) {
-            // Return a specific quote by ID
-            $result = $quote->read_single($id);
-        } elseif ($author_id !== null) {
-            // Return quotes by author ID
-            $result = $quote->read_by_author($author_id);
-        } elseif ($category_id !== null) {
-            // Return quotes by category ID
-            $result = $quote->read_by_category($category_id);
-        } else {
-            // Return all quotes
-            $result = $quote->read();
-        }
+        // Return all quotes
+        $result = $quote->read();
 
         // Check if any quotes were found
         if ($result->rowCount() > 0) {
@@ -62,6 +51,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             }
 
             // Turn to JSON & output
+            http_response_code(200); // OK
             echo json_encode($quotes_arr);
         } else {
             // No quotes found
@@ -69,6 +59,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             echo json_encode(array("message" => "No Quotes Found"));
         }
         break;
+        
     case 'POST':
         // Create a new quote
         // Make sure to validate and sanitize input data

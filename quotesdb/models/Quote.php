@@ -43,6 +43,27 @@ class Quote {
 
         return false;
     }
+        // Read quotes
+    public function read() {
+        // Create query
+        $query = 'SELECT
+                    id,
+                    quote,
+                    author_id,
+                    category_id
+                FROM
+                    ' . $this->table . '
+                ORDER BY
+                    id DESC';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Execute query
+        $stmt->execute();
+
+        return $stmt;
+    }
 
     // Read a single quote by ID
     function read_single($id) {
