@@ -27,111 +27,102 @@ $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
 
 // Depending on the request method, perform different actions
 switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
-        // Return all quotes
-        $result = $quote->read();
+    // GET method
+case 'GET':
+    $result = $quote->read();
 
-        // Check if any quotes were found
-        if ($result->rowCount() > 0) {
-            $quotes_arr = array();
-            $quotes_arr['data'] = array();
+    if ($result->rowCount() > 0) {
+        $quotes_arr = array();
+        $quotes_arr['data'] = array();
 
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
 
-                $quote_item = array(
-                    'id' => $id,
-                    'quote' => $quote,
-                    'author_id' => $author_id,
-                    'category_id' => $category_id
-                );
+            $quote_item = array(
+                'id' => $id,
+                'quote' => $quote_text, // Use a different variable name for the quote text
+                'author_id' => $author_id,
+                'category_id' => $category_id
+            );
 
-                // Push to "data"
-                array_push($quotes_arr['data'], $quote_item);
-            }
-
-            // Turn to JSON & output
-            http_response_code(200); // OK
-            echo json_encode($quotes_arr);
-        } else {
-            // No quotes found
-            http_response_code(404); // Not Found
-            echo json_encode(array("message" => "No Quotes Found"));
+            array_push($quotes_arr['data'], $quote_item);
         }
-        break;
-        
-    case 'POST':
-        // Create a new quote
-        // Make sure to validate and sanitize input data
-        $data = json_decode(file_get_contents("php://input"));
 
-        // Check if all required fields are present
-        if (!empty($data->quote) && !empty($data->author_id) && !empty($data->category_id)) {
-            $quote->quote = $data->quote;
-            $quote->author_id = $data->author_id;
-            $quote->category_id = $data->category_id;
+        http_response_code(200);
+        echo json_encode($quotes_arr);
+    } else {
+        http_response_code(404);
+        echo json_encode(array("message" => "No Quotes Found"));
+    }
+    break;
 
-            if ($quote->create()) {
-                http_response_code(201); // Created
-                echo json_encode(array("message" => "Quote created successfully"));
-            } else {
-                http_response_code(500); // Internal Server Error
-                echo json_encode(array("message" => "Failed to create quote"));
-            }
+// POST method
+case 'POST':
+    $data = json_decode(file_get_contents("php://input"));
+
+    if (!empty($data->quote) && !empty($data->author_id) && !empty($data->category_id)) {
+        $quote->quote = $data->quote;
+        $quote->author_id = $data->author_id;
+        $quote->category_id = $data->category_id;
+
+        if ($quote->create()) {
+            http_response_code(201);
+            echo json_encode(array("message" => "Quote created successfully"));
         } else {
-            http_response_code(400); // Bad Request
-            echo json_encode(array("message" => "Missing required fields"));
+            http_response_code(500);
+            echo json_encode(array("message" => "Failed to create quote"));
         }
-        break;
-    case 'PUT':
-        // Update an existing quote
-        // Make sure to validate and sanitize input data
-        $data = json_decode(file_get_contents("php://input"));
+    } else {
+        http_response_code(400);
+        echo json_encode(array("message" => "Missing required fields"));
+    }
+    break;
 
-        // Check if all required fields are present
-        if (!empty($data->id) && !empty($data->quote) && !empty($data->author_id) && !empty($data->category_id)) {
-            $quote->id = $data->id;
-            $quote->quote = $data->quote;
-            $quote->author_id = $data->author_id;
-            $quote->category_id = $data->category_id;
+// PUT method
+case 'PUT':
+    $data = json_decode(file_get_contents("php://input"));
 
-            if ($quote->update()) {
-                http_response_code(200); // OK
-                echo json_encode(array("message" => "Quote updated successfully"));
-            } else {
-                http_response_code(500); // Internal Server Error
-                echo json_encode(array("message" => "Failed to update quote"));
-            }
+    if (!empty($data->id) && !empty($data->quote) && !empty($data->author_id) && !empty($data->category_id)) {
+        $quote->id = $data->id;
+        $quote->quote = $data->quote;
+        $quote->author_id = $data->author_id;
+        $quote->category_id = $data->category_id;
+
+        if ($quote->update()) {
+            http_response_code(200);
+            echo json_encode(array("message" => "Quote updated successfully"));
         } else {
-            http_response_code(400); // Bad Request
-            echo json_encode(array("message" => "Missing required fields"));
+            http_response_code(500);
+            echo json_encode(array("message" => "Failed to update quote"));
         }
-        break;
-    case 'DELETE':
-        // Delete an existing quote
-        // Make sure to validate and sanitize input data
-        $data = json_decode(file_get_contents("php://input"));
+    } else {
+        http_response_code(400);
+        echo json_encode(array("message" => "Missing required fields"));
+    }
+    break;
 
-        // Check if ID is present
-        if (!empty($data->id)) {
-            $quote->id = $data->id;
+// DELETE method
+case 'DELETE':
+    $data = json_decode(file_get_contents("php://input"));
 
-            if ($quote->delete()) {
-                http_response_code(200); // OK
-                echo json_encode(array("message" => "Quote deleted successfully"));
-            } else {
-                http_response_code(500); // Internal Server Error
-                echo json_encode(array("message" => "Failed to delete quote"));
-            }
+    if (!empty($data->id)) {
+        $quote->id = $data->id;
+
+        if ($quote->delete()) {
+            http_response_code(200);
+            echo json_encode(array("message" => "Quote deleted successfully"));
         } else {
-            http_response_code(400); // Bad Request
-            echo json_encode(array("message" => "Missing quote ID"));
+            http_response_code(500);
+            echo json_encode(array("message" => "Failed to delete quote"));
         }
-        break;
-    default:
-        // Invalid request method
-        http_response_code(405); // Method Not Allowed
-        echo json_encode(array("message" => "Method not allowed."));
+    } else {
+        http_response_code(400);
+        echo json_encode(array("message" => "Missing quote ID"));
+    }
+    break;
+
+default:
+    http_response_code(405);
+    echo json_encode(array("message" => "Method not allowed."));
 }
 ?>
-
