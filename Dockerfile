@@ -33,7 +33,7 @@ RUN a2enmod rewrite
 #not providing here and not pushing to github
 
 #expose port 8080 to allow incoming connections to the container
-EXPOSE 1000
+EXPOSE 8080
 
 #by default apache is started automatically. you can change or customize
 #the startup command if necessary. 

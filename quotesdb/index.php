@@ -34,6 +34,28 @@ $response = array(
     'authors' => $author->read(),
     'quotes' => $quote->read()
 );
+// Check the request URL and method
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        if ($_SERVER['REQUEST_URI'] === '/api/quotes/') {
+            // Handle the GET request for the /api/quotes/ endpoint
+            $quotes = $quote->read();
+            echo json_encode($quotes);
+        } elseif ($_SERVER['REQUEST_URI'] === '/api/authors/') {
+            // Handle the GET request for the /api/authors/ endpoint
+            $authors = $author->read();
+            echo json_encode($authors);
+        } elseif ($_SERVER['REQUEST_URI'] === '/api/categories/') {
+            // Handle the GET request for the /api/categories/ endpoint
+            $categories = $category->read();
+            echo json_encode($categories);
+        } else {
+            // Handle other endpoints or methods as needed
+            echo "Not a request within quotesdb.";
+        }
+    } else {
+        // Handle other endpoints or methods as needed
+        echo "Not a request within quotesdb.";
+    }
 
 // Output the combined response as JSON
 echo json_encode($response);
