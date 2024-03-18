@@ -17,7 +17,7 @@ class Database {
         $this->password = getenv('DATABASE_PASSWORD');
     
         $this->conn = null;
-        $dsn = "pgsql:host=127.0.0.1;port=5432;dbname=" . getenv('DATABASE_NAME');
+        $dsn = "pgsql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name;
         $username = $this->username;
         $password = $this->password;
         try {
