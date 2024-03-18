@@ -3,15 +3,15 @@ class Database {
     //DB params
     private $host;
     //private $port;
-    private $db_name;
+    private $dbname;
     private $username;
     private $password;
     private $conn;
     
     public function __construct(){
         $this->host = getenv('DATABASE_HOST');
-        //$this->port = getenv('DATABASE_PORT'); //5432 (default port for PostgreSQL)
-        $this->db_name = getenv('DATABASE_NAME');
+        $this->port = getenv('DATABASE_PORT'); //5432 (default port for PostgreSQL)
+        $this->dbname = getenv('DATABASE_NAME');
         $this->username = getenv('DATABASE_USERNAME');
         $this->password = getenv('DATABASE_PASSWORD');
     }
@@ -21,7 +21,7 @@ class Database {
             return $this->conn;
         }
         else{
-            $dsn = "pgsql:host={$this->host};dbname={$this->db_name}"; //port={$this->port};
+            $dsn = "pgsql:host={$this->host};dbname={$this->dbname}"; //port={$this->port};
             try {
                 $this->conn = new PDO($dsn, $this->username, $this->password);
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
