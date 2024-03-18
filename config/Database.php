@@ -2,7 +2,7 @@
 class Database {
     //DB params
     private $host;
-    private $port;
+    //private $port;
     private $db_name;
     private $username;
     private $password;
@@ -21,7 +21,7 @@ class Database {
             return $this->conn;
         }
         else{
-            $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->db_name}";
+            $dsn = "pgsql:host={$this->host};dbname={$this->db_name}"; //port={$this->port};
             try {
                 $this->conn = new PDO($dsn, $this->username, $this->password);
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
