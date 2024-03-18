@@ -9,11 +9,13 @@ class Database {
     private $conn;
     
     public function __construct(){
-        $this->host = getenv('DATABASE_HOST');
-        $this->port = getenv('DATABASE_PORT'); //5432 (default port for PostgreSQL)
-        $this->dbname = getenv('DATABASE_NAME');
-        $this->username = getenv('DATABASE_USERNAME');
-        $this->password = getenv('DATABASE_PASSWORD');
+        $url = parse_url(getenv('DATABASE_URL'));
+
+        $this->host = $url['host'];
+        $this->port = $url['port'];
+        $this->dbname = ltrim($url['path'], '/');
+        $this->username = $url['user'];
+        $this->password = $url['pass'];
     }
     //DB connect
     public function connect(){
@@ -33,6 +35,7 @@ class Database {
         }
     }
 }
+
 
 ?>
 
