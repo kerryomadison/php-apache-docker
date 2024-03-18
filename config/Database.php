@@ -10,7 +10,7 @@ class Database {
     
     public function __construct(){
         $this->host = getenv('DATABASE_HOST');
-        $this->port = getenv('DATABASE_PORT'); //5432 (default port for PostgreSQL)
+        //$this->port = getenv('DATABASE_PORT'); //5432 (default port for PostgreSQL)
         $this->db_name = getenv('DATABASE_NAME');
         $this->username = getenv('DATABASE_USERNAME');
         $this->password = getenv('DATABASE_PASSWORD');
