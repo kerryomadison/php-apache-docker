@@ -1,6 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
+include_once '../Quote.php'; // Include the Quote class
 
 // Check if the quote ID is provided in the request
 if (isset($_GET['id'])) {
@@ -11,17 +12,20 @@ if (isset($_GET['id'])) {
         $database = new Database();
         $pdo = $database->connect();
 
-        // Prepare and execute a SQL statement to select the quote with the provided ID
-        $stmt = $pdo->prepare("SELECT * FROM quotes WHERE id = ?");
-        $stmt->execute([$quote_id]);
+        // Instantiate the Quote class
+        $quote = new Quote($pdo);
+
+        // Use the read_single method to fetch the quote
+        $stmt = $quote->read_single($quote_id);
 
         // Check if a quote was found
         if ($stmt->rowCount() > 0) {
             // Fetch the quote as an associative array
-            $quote = $stmt->fetch(PDO::FETCH_ASSOC);
+            $quote_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // Return the quote as a JSON response
-            echo json_encode($quote);
+            http_response_code(200); // OK
+            echo json_encode($quote_data);
         } else {
             // Quote not found
             http_response_code(404); // Not Found
