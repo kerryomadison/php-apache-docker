@@ -17,12 +17,12 @@ class Category {
   public function read() {
       // Create query
       $query = 'SELECT
-                  id,
-                  category_name AS category
-                FROM
-                  ' . $this->table . '
-                ORDER BY
-                  id DESC';
+            id,
+            category
+          FROM
+            ' . $this->table . '
+          ORDER BY
+            id DESC';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
@@ -37,8 +37,8 @@ class Category {
   public function create() {
       // Create query
       $query = 'INSERT INTO ' . $this->table . '
-                SET
-                  category_name = :category_name';
+          SET
+            category = :category_name';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
@@ -61,10 +61,10 @@ class Category {
   public function update() {
       // Create query
       $query = 'UPDATE ' . $this->table . '
-                SET
-                  category_name = :category_name
-                WHERE
-                  id = :id';
+          SET
+            category = :category_name
+          WHERE
+            id = :id';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
