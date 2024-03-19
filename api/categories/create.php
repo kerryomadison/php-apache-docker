@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../config/Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Category.php';
 // Validate incoming category name
 $category_name = isset($_POST['category']) ? $_POST['category'] : '';

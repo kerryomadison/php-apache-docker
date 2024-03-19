@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../config/Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Quote.php';
 // Validate incoming quote text
 $quote_text = isset($_POST['quote']) ? $_POST['quote'] : '';

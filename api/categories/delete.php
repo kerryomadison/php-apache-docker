@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../config/Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Category.php';
 // Check if the request includes the category ID
 $category_id = isset($_GET['id']) ? $_GET['id'] : die();

@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Author.php';
 // Check if the request includes the author ID
 $author_id = isset($_GET['id']) ? $_GET['id'] : die();

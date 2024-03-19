@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Author.php';
 try {
     // Create a new instance of the Database class

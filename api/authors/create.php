@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../config/Database.php';
+include_once '../../config/Database.php'; 
 include_once '../../models/Author.php';
 // Validate incoming author name
 $author_name = isset($_POST['author']) ? $_POST['author'] : '';
