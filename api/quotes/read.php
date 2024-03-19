@@ -20,33 +20,15 @@ $result = $quote->read();
 // Get row count of returned quotes
 $num = $result->rowCount();
 
+$quotes_array = array(); // Initialize the array
+
 if ($num > 0) {
-    $quotes_array = array();
-
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        // Fetch author and category details based on author_id and category_id
-        $author_id = $row['author_id'];
-        $category_id = $row['category_id'];
-
-        // Fetch author details
-        $author_query = "SELECT author FROM authors WHERE id = :author_id";
-        $author_stmt = $db->prepare($author_query);
-        $author_stmt->bindParam(':author_id', $author_id);
-        $author_stmt->execute();
-        $author_row = $author_stmt->fetch(PDO::FETCH_ASSOC);
-        $author = $author_row['author'];
-
-        // Fetch category details
-        $category_query = "SELECT category FROM categories WHERE id = :category_id";
-        $category_stmt = $db->prepare($category_query);
-        $category_stmt->bindParam(':category_id', $category_id);
-        $category_stmt->execute();
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
-        $category = $category_row['category'];
+        extract($row);
 
         $single_quote = array(
-            'id' => $row['id'],
-            'quote' => $row['quote'],
+            'id' => $id,
+            'quote' => $quote,
             'author' => $author,
             'category' => $category
         );
@@ -54,14 +36,11 @@ if ($num > 0) {
         // Store item for results
         array_push($quotes_array, $single_quote);
     }
-
-    // Return the quotes as a JSON response
-    http_response_code(200); // OK
-    echo json_encode($quotes_array);
-} else {
-    http_response_code(404); // Not Found
-    echo json_encode(array('message' => 'No Quotes Found'));
 }
+
+// Return the quotes array as a JSON response
+http_response_code(200); // OK
+echo json_encode($quotes_array);
 
 
 
