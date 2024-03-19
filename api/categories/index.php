@@ -40,17 +40,18 @@ case 'GET':
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-
+        
             $category_item = array(
                 'id' => $id,
-                'category_id' => $category_name
+                'category_id' => $category // Use $category instead of $category_name
             );
-
+        
             array_push($categories_arr['data'], $category_item);
         }
-
+        
         http_response_code(200);
-        echo json_encode($category_arr);
+        echo json_encode($categories_arr);
+        
     } else {
         http_response_code(404);
         echo json_encode(array("message" => "No Quotes Found"));
