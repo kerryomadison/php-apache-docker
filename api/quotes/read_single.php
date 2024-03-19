@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../config/Database.php';
+include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
 
 // Check if the category ID is provided in the request

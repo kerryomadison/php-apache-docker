@@ -24,7 +24,7 @@ class Quote {
             return true;
         }
 
-        printf("Error: %s.\n", $stmt->error);
+        throw new Exception("Error creating quote: " . $stmt->error);
 
         return false;
     }
@@ -64,11 +64,10 @@ class Quote {
         return $stmt;
     }
 
-
-    public function read_single($id) {
+    public function read_single() {
         $query = "SELECT id, quote, author_id, category_id FROM " . $this->table_name . " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $id);
+        $stmt->bindParam(1, $this->id);
         $stmt->execute();
         return $stmt;
     }
@@ -86,7 +85,7 @@ class Quote {
             return true;
         }
 
-        printf("Error: %s.\n", $stmt->error);
+        throw new Exception("Error updating quote: " . $stmt->error);
 
         return false;
     }
@@ -100,10 +99,10 @@ class Quote {
             return true;
         }
 
-        printf("Error: %s.\n", $stmt->error);
+        throw new Exception("Error deleting quote: " . $stmt->error);
 
         return false;
     }
 }
-
 ?>
+
