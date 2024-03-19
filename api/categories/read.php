@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../config/Database.php';
-
+include_once '../../models/Category.php';
 try {
     // Create a new instance of the Database class
     $database = new Database();

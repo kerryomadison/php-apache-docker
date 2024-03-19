@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
-
+include_once '../../models/Quote.php';
 try {
     // Create a new instance of the Database class
     $database = new Database();

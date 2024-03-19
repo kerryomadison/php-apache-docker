@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
-
+include_once '../../models/Quote.php';
 // Get the quote ID from the request
 $quote_id = isset($_POST['id']) ? $_POST['id'] : null;
 if (!$quote_id) {

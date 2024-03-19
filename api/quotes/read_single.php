@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
-include_once '../Quote.php'; // Include the Quote class
+include_once '../../models/Quote.php'; // Include the Quote class
 
 // Check if the quote ID is provided in the request
 if (isset($_GET['id'])) {

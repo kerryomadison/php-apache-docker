@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
-
+include_once '../../models/Quote.php';
 // Check if the quote ID is provided in the request
 if (isset($_POST['id'])) {
     $quote_id = $_POST['id'];

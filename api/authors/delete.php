@@ -1,7 +1,7 @@
 <?php
 // Include Database.php
 include_once '../Database.php';
-
+include_once '../../models/Author.php';
 // Check if the author ID is provided in the request
 if (!isset($_GET['id'])) {
     http_response_code(400); // Bad Request
