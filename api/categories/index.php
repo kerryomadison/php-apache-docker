@@ -23,9 +23,13 @@ $db = $database->connect();
 $category = new Category($db);
 
 // Depending on the request method, include the corresponding file
-switch ($method) {
+switch ($method){
     case 'GET':
-        include_once 'read.php';
+        if (isset($_GET['id'])) {
+            include_once 'read_single.php';
+        } else {
+            include_once 'read.php';
+        }
         break;
     case 'POST':
         include_once 'create.php';
