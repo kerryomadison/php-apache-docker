@@ -14,12 +14,7 @@ class Database {
         $this->dbname = getenv('DATABASE_NAME');
         $this->username = getenv('DATABASE_USERNAME');
         $this->password = getenv('DATABASE_PASSWORD');
-        // Output the values for debugging
-        echo "Host: " . $this->host . "\n";
-        echo "Port: " . $this->port . "\n";
-        echo "DB Name: " . $this->dbname . "\n";
-        echo "Username: " . $this->username . "\n";
-        echo "Password: " . $this->password . "\n";
+        
     }
     //DB connect
     public function connect(){
