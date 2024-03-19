@@ -40,7 +40,7 @@ case 'GET':
 
             $quote_item = array(
                 'id' => $id,
-                'quote' => $quote_text, // Use a different variable name for the quote text
+                'quote' => $quote, 
                 'author_id' => $author_id,
                 'category_id' => $category_id
             );

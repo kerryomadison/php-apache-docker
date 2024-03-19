@@ -10,9 +10,12 @@ if ($method === 'OPTIONS') {
 }
 
 // Include Database.php
-include_once '../../config/Database.php';
-include_once '../../models/Quote.php';
-include_once '../../Category.php';
+include_once '../../config/Database.php'; 
+
+// Include Category.php
+include_once '../../models/Category.php';
+
+
 // Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
