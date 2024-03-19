@@ -24,13 +24,11 @@ if ($num > 0) {
     $quotes_array['data'] = array();
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        extract($row);
-    
         $single_quote = array(
-            'id' => $id,
-            'quote' => $quote,
-            'author' => $author,
-            'category' => $category
+            'id' => $row['id'],
+            'quote' => $row['quote'],
+            'author' => $row['author'],
+            'category' => $row['category']
         );
     
         // Store item for results
