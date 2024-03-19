@@ -1,6 +1,6 @@
 <?php
 // Include Database.php
-include_once '../../config/Database.php'; 
+include_once '../config/Database.php';
 include_once '../../models/Category.php';
 // Check if the category ID is provided in the request
 if (isset($_GET['id'])) {
@@ -23,7 +23,7 @@ if (isset($_GET['id'])) {
         } else {
             // Category not found
             http_response_code(404); // Not Found
-            echo json_encode(array("message" => "Category not found."));
+            echo json_encode(array("message" => "category_id Not Found."));
         }
     } catch (PDOException $e) {
         // Return an error response if an exception occurred

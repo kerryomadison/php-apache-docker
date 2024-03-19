@@ -28,7 +28,7 @@ try {
         echo json_encode($author);
     } else {
         http_response_code(404); // Not Found
-        echo json_encode(array("message" => "Author not found."));
+        echo json_encode(array("message" => "author_id Not Found"));
     }
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
