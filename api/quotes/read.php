@@ -25,17 +25,17 @@ if ($num > 0) {
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-
+    
         $single_quote = array(
             'id' => $id,
             'quote' => $quote,
             'author' => $author,
             'category' => $category
         );
-
+    
         // Store item for results
         array_push($quotes_array['data'], $single_quote);
-    }
+    }    
 
     // Return the quotes as a JSON response
     http_response_code(200); // OK
