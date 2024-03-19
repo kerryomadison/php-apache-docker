@@ -14,17 +14,28 @@ try {
         $author_id = $_GET['author_id'];
 
         // Prepare and execute a SQL statement to select quotes by author
-        $stmt = $pdo->prepare("SELECT * FROM quotes WHERE author_id = ?");
+        $stmt = $pdo->prepare("SELECT q.id, q.quote, a.author, c.category 
+                                FROM quotes q 
+                                JOIN authors a ON q.author_id = a.id 
+                                JOIN categories c ON q.category_id = c.id 
+                                WHERE q.author_id = ?");
         $stmt->execute([$author_id]);
     } elseif (isset($_GET['category_id'])) {
         $category_id = $_GET['category_id'];
 
         // Prepare and execute a SQL statement to select quotes by category
-        $stmt = $pdo->prepare("SELECT * FROM quotes WHERE category_id = ?");
+        $stmt = $pdo->prepare("SELECT q.id, q.quote, a.author, c.category 
+                                FROM quotes q 
+                                JOIN authors a ON q.author_id = a.id 
+                                JOIN categories c ON q.category_id = c.id 
+                                WHERE q.category_id = ?");
         $stmt->execute([$category_id]);
     } else {
         // Prepare and execute a SQL statement to select all quotes
-        $stmt = $pdo->query("SELECT * FROM quotes");
+        $stmt = $pdo->query("SELECT q.id, q.quote, a.author, c.category 
+                                FROM quotes q 
+                                JOIN authors a ON q.author_id = a.id 
+                                JOIN categories c ON q.category_id = c.id");
     }
 
     // Check if quotes were found
@@ -45,5 +56,6 @@ try {
     echo json_encode(array("message" => "Error retrieving quotes: " . $e->getMessage()));
 }
 ?>
+
 
 
