@@ -20,28 +20,15 @@ $result = $quote->read();
 $num = $result->rowCount();
 
 if ($num > 0) {
-    $quotes_array = array();
-    $quotes_array['data'] = array();
-
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $single_quote = array(
-            'id' => $row['id'],
-            'quote' => $row['quote'],
-            'author' => $row['author'],
-            'category' => $row['category']
-        );
-    
-        // Store item for results
-        array_push($quotes_array['data'], $single_quote);
-    }    
+    $quotes_array = $result->fetchAll(PDO::FETCH_ASSOC);
 
     // Return the quotes as a JSON response
-    http_response_code(200); // OK
     echo json_encode($quotes_array);
 } else {
-    http_response_code(404); // Not Found
+    // No quotes found
     echo json_encode(array('message' => 'No Quotes Found'));
 }
+
 
 
 
