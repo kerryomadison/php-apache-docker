@@ -1,44 +1,41 @@
 <?php
-// Include Database.php
-include_once '../Database.php';
-include_once '../../models/Quote.php'; // Include the Quote class
+include_once '../../config/Database.php';
+include_once '../../models/Quote.php';
 
 // Check if the quote ID is provided in the request
 if (isset($_GET['id'])) {
     $quote_id = $_GET['id'];
 
-    try {
-        // Create a new instance of the Database class
-        $database = new Database();
-        $pdo = $database->connect();
+    // Instantiate DB/connect
+    $database = new Database();
+    $db = $database->connect();
 
-        // Instantiate the Quote class
-        $quote = new Quote($pdo);
+    // Instantiate quote object
+    $quote = new Quote($db);
 
-        // Use the read_single method to fetch the quote
-        $stmt = $quote->read_single($quote_id);
+    // Set the quote ID
+    $quote->id = $quote_id;
 
-        // Check if a quote was found
-        if ($stmt->rowCount() > 0) {
-            // Fetch the quote as an associative array
-            $quote_data = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Read single quote
+    $result = $quote->read_single();
 
-            // Return the quote as a JSON response
-            http_response_code(200); // OK
-            echo json_encode($quote_data);
-        } else {
-            // Quote not found
-            http_response_code(404); // Not Found
-            echo json_encode(array("message" => "Quote not found."));
-        }
-    } catch (PDOException $e) {
-        http_response_code(500); // Internal Server Error
-        echo json_encode(array("message" => "Error retrieving quote: " . $e->getMessage()));
+    // Check if a quote was found
+    if ($result->rowCount() == 1) {
+        $quote_data = $result->fetch(PDO::FETCH_ASSOC);
+
+        // Return the quote as a JSON response
+        http_response_code(200); // OK
+        echo json_encode($quote_data);
+    } else {
+        // Quote not found
+        http_response_code(404); // Not Found
+        echo json_encode(array('message' => 'Quote not found.'));
     }
 } else {
     // Quote ID not provided
     http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Missing quote ID."));
+    echo json_encode(array('message' => 'Missing quote ID.'));
 }
 ?>
+
 
