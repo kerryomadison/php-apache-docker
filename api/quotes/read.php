@@ -38,24 +38,18 @@ try {
                                 JOIN categories c ON q.category_id = c.id");
     }
 
-    // Check if quotes were found
-    if ($stmt->rowCount() > 0) {
-        // Fetch all quotes as an associative array
-        $quotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch all quotes as an associative array
+    $quotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Return the quotes as a JSON response
-        http_response_code(200); // OK
-        echo json_encode($quotes);
-    } else {
-        // No quotes found
-        http_response_code(404); // Not Found
-        echo json_encode(array("message" => "No quotes found."));
-    }
+    // Return the quotes as a JSON response
+    http_response_code(200); // OK
+    echo json_encode($quotes);
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error retrieving quotes: " . $e->getMessage()));
 }
 ?>
+
 
 
 
