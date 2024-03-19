@@ -7,6 +7,8 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
+    $stmt = null;
+
     // Check if author_id or category_id is provided in the request
     if (isset($_GET['author_id'])) {
         $author_id = $_GET['author_id'];
@@ -14,21 +16,15 @@ try {
         // Prepare and execute a SQL statement to select quotes by author
         $stmt = $pdo->prepare("SELECT * FROM quotes WHERE author_id = ?");
         $stmt->execute([$author_id]);
-
-        // Fetch and return the quotes as JSON
     } elseif (isset($_GET['category_id'])) {
         $category_id = $_GET['category_id'];
 
         // Prepare and execute a SQL statement to select quotes by category
         $stmt = $pdo->prepare("SELECT * FROM quotes WHERE category_id = ?");
         $stmt->execute([$category_id]);
-
-        // Fetch and return the quotes as JSON
     } else {
         // Prepare and execute a SQL statement to select all quotes
         $stmt = $pdo->query("SELECT * FROM quotes");
-
-        // Fetch and return the quotes as JSON
     }
 
     // Check if quotes were found
@@ -37,6 +33,7 @@ try {
         $quotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Return the quotes as a JSON response
+        http_response_code(200); // OK
         echo json_encode($quotes);
     } else {
         // No quotes found
@@ -48,4 +45,5 @@ try {
     echo json_encode(array("message" => "Error retrieving quotes: " . $e->getMessage()));
 }
 ?>
+
 
