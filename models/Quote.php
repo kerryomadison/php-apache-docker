@@ -30,11 +30,40 @@ class Quote {
     }
 
     public function read() {
-        $query = 'SELECT id, quote, author_id, category_id FROM ' . $this->table_name . ' ORDER BY id DESC';
+        // Initialize query
+        $query = 'SELECT id, quote, author_id, category_id FROM ' . $this->table_name;
+
+        // Initialize bindings array
+        $bindings = array();
+
+        // Check if author_id or category_id is provided in the request
+        if (!empty($this->author_id) && !empty($this->category_id)) {
+            $query .= ' WHERE author_id = ? AND category_id = ?';
+            $bindings[] = $this->author_id;
+            $bindings[] = $this->category_id;
+        } elseif (!empty($this->author_id)) {
+            $query .= ' WHERE author_id = ?';
+            $bindings[] = $this->author_id;
+        } elseif (!empty($this->category_id)) {
+            $query .= ' WHERE category_id = ?';
+            $bindings[] = $this->category_id;
+        }
+
+        // Prepare the query
         $stmt = $this->conn->prepare($query);
-        $stmt->execute();
+
+        // Bind parameters if bindings exist
+        if (!empty($bindings)) {
+            $stmt->execute($bindings);
+        } else {
+            // Execute the query without parameters
+            $stmt->execute();
+        }
+
+        // Return the statement
         return $stmt;
     }
+
 
     public function read_single($id) {
         $query = "SELECT id, quote, author_id, category_id FROM " . $this->table_name . " WHERE id = ?";
