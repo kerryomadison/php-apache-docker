@@ -21,7 +21,7 @@ if (isset($_GET['id'])) {
 
         if ($quote_data === false) {
             // No quote found
-            http_response_code(404); // Not Found
+            http_response_code(200); // Not Found
             echo json_encode(array("message" => "No Quotes Found"));
         } else {
             // Quote found, return the quote as a JSON response
