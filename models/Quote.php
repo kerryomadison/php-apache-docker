@@ -15,19 +15,7 @@ class Quote {
     public function create() {
         // Make sure quote, author_id, and category_id are set
         if (empty($this->quote) || empty($this->author_id) || empty($this->category_id)) {
-            throw new Exception("Missing Required Parameters.");
-        }
-    
-        // Check if author_id exists
-        $author_exists = $this->authorExists($this->author_id);
-        if (!$author_exists) {
-            throw new Exception("author_id Not Found.");
-        }
-    
-        // Check if category_id exists
-        $category_exists = $this->categoryExists($this->category_id);
-        if (!$category_exists) {
-            throw new Exception("category_id Not Found.");
+            throw new Exception("Invalid input data.");
         }
     
         // Create query
