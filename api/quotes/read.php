@@ -8,64 +8,44 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
-    // Instantiate quote object
+    // Instantiate Quote object
     $quote = new Quote($pdo);
 
-    // Handle possible inputted Foreign Keys | Will assign NULL if not inputted.
-    $quote->author_id = isset($_GET['author_id']) ? $_GET['author_id'] : null;
-    $quote->category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
-
-    // Quote read query
+    // Read quotes
     $result = $quote->read();
-
-    // Get row count of returned quotes
     $num = $result->rowCount();
 
     if ($num > 0) {
         $quotes_array = array();
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            // Fetch author and category details based on author_id and category_id
-            $author_id = $row['author_id'];
-            $category_id = $row['category_id'];
+            extract($row);
 
-            // Fetch author details
-            $author_query = "SELECT author FROM authors WHERE id = :author_id";
-            $author_stmt = $pdo->prepare($author_query);
-            $author_stmt->bindParam(':author_id', $author_id);
-            $author_stmt->execute();
-            $author_row = $author_stmt->fetch(PDO::FETCH_ASSOC);
-            $author = $author_row['author'];
-
-            // Fetch category details
-            $category_query = "SELECT category FROM categories WHERE id = :category_id";
-            $category_stmt = $pdo->prepare($category_query);
-            $category_stmt->bindParam(':category_id', $category_id);
-            $category_stmt->execute();
-            $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
-            $category = $category_row['category'];
-
-            $single_quote = array(
-                'id' => $row['id'],
-                'quote' => $row['quote'],
-                'author' => $author,
-                'category' => $category
+            $quote_item = array(
+                'id' => $id,
+                'quote' => $quote,
+                'author_id' => $author_id,
+                'category_id' => $category_id
             );
 
-            // Store item for results
-            array_push($quotes_array, $single_quote);
+            array_push($quotes_array, $quote_item);
         }
 
-        http_response_code(200); // OK
+        // Set response code to 200 OK
+        http_response_code(200);
         echo json_encode($quotes_array);
     } else {
-        // No quotes found
-        http_response_code(404); // Not Found
-        echo json_encode(array('message' => 'No Quotes Found'));
+        // Set response code to 404 Not Found
+        http_response_code(404);
+        echo json_encode(
+            array('message' => 'No quotes found.')
+        );
     }
 } catch (PDOException $e) {
-    // Return an error response if an exception occurred
-    http_response_code(500); // Internal Server Error
-    echo json_encode(array('message' => 'Error reading quotes: ' . $e->getMessage()));
+    // Set response code to 500 Internal Server Error
+    http_response_code(500);
+    echo json_encode(
+        array('message' => 'Error reading quotes: ' . $e->getMessage())
+    );
 }
 ?>
