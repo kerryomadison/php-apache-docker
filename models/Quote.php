@@ -70,49 +70,20 @@ class Quote {
         return $stmt;
     }    
 
+    // In Quote.php
     public function read_single() {
-        $query = "SELECT id, quote, author_id, category_id FROM " . $this->table_name . " WHERE id = ?";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->id);
-        $stmt->execute();
-    
-        if ($stmt->rowCount() == 0) {
-            return false; // No quote found
-        }
-    
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $author_id = $row['author_id'];
-        $category_id = $row['category_id'];
-    
-        // Fetch author details
-        $author_query = "SELECT author FROM authors WHERE id = :author_id";
-        $author_stmt = $this->conn->prepare($author_query);
-        $author_stmt->bindParam(':author_id', $author_id);
-        $author_stmt->execute();
-        $author_row = $author_stmt->fetch(PDO::FETCH_ASSOC);
-        $author = $author_row['author'];
-    
-        // Fetch category details
-        $category_query = "SELECT category FROM categories WHERE id = :category_id";
-        $category_stmt = $this->conn->prepare($category_query);
-        $category_stmt->bindParam(':category_id', $category_id);
-        $category_stmt->execute();
-        $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
-        $category = $category_row['category'];
-    
-        // Return the quote with author and category details
-        $quote = array(
-            'id' => $row['id'],
-            'quote' => $row['quote'],
-            'author' => $author,
-            'category' => $category
-        );
-    
-        return $quote;
-    }
-    
-    
+    $query = 'SELECT id, quote, author, category FROM quotes WHERE id = :id';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $this->id);
+    $stmt->execute();
 
+    // Fetch quote as an associative array
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row; // Return the fetched quote
+    }
+
+    
     public function update() {
         $query = "UPDATE " . $this->table_name . " SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id";
         $stmt = $this->conn->prepare($query);

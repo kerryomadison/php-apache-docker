@@ -17,15 +17,14 @@ if (isset($_GET['id'])) {
         $quote->id = $quote_id;
 
         // Read single quote
-        $result = $quote->read_single();
+        $quote_data = $quote->read_single();
 
-        if ($result === false) {
+        if ($quote_data === false) {
             // No quote found
             http_response_code(404); // Not Found
             echo json_encode(array("message" => "No Quotes Found"));
         } else {
             // Quote found, return the quote as a JSON response
-            $quote_data = $result->fetch(PDO::FETCH_ASSOC);
             echo json_encode($quote_data);
         }
     } catch (PDOException $e) {
