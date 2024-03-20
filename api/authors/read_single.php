@@ -27,8 +27,8 @@ try {
         $author = $stmt->fetch(PDO::FETCH_ASSOC);
         echo json_encode($author);
     } else {
-        http_response_code(404); // Not Found
-        echo json_encode(array("message" => "author_id Not Found"));
+        http_response_code(200); // Not Found
+        echo json_encode(array("message"=>"author_id Not Found"));
     }
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
