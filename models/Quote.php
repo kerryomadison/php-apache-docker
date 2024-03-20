@@ -64,14 +64,16 @@ class Quote {
     
 
     public function read_single() {
-        // Prepare the query
-        $query = 'SELECT id, quote FROM ' . $this->table_name . ' WHERE id = :id';
+        // Prepare the query to fetch the quote with author and category
+        $query = 'SELECT q.id, q.quote, a.author, c.category 
+                  FROM ' . $this->table_name . ' q
+                  LEFT JOIN authors a ON q.author_id = a.id
+                  LEFT JOIN categories c ON q.category_id = c.id
+                  WHERE q.id = :id';
+    
+        // Prepare and execute the statement
         $stmt = $this->conn->prepare($query);
-    
-        // Bind the ID parameter
         $stmt->bindParam(':id', $this->id);
-    
-        // Execute the query
         $stmt->execute();
     
         // Check if a quote was found
@@ -81,7 +83,6 @@ class Quote {
             return false;
         }
     }
-
     
     public function update() {
         $query = "UPDATE " . $this->table_name . " SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id";
