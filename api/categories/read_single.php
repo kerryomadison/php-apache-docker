@@ -22,8 +22,8 @@ if (isset($_GET['id'])) {
             echo json_encode($category);
         } else {
             // Category not found
-            http_response_code(404); // Not Found
-            echo json_encode(array("message" => "category_id Not Found."));
+            http_response_code(200); // Not Found
+            echo json_encode(array("message" => "category_id Not Found"));
         }
     } catch (PDOException $e) {
         // Return an error response if an exception occurred
