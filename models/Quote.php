@@ -30,43 +30,35 @@ class Quote {
     }
 
     public function read() {
-        // Initialize query
-        $query = 'SELECT q.id, q.quote, q.author_id, q.category_id, a.author, c.category FROM ' . $this->table_name . ' q';
-    
-        // Join with authors table
+        $query = 'SELECT q.id, q.quote, a.author, c.category FROM ' . $this->table_name . ' q';
         $query .= ' LEFT JOIN authors a ON q.author_id = a.id';
-    
-        // Join with categories table
         $query .= ' LEFT JOIN categories c ON q.category_id = c.id';
-    
-        // Initialize bindings array
+        
+        $where = array();
         $bindings = array();
     
-        // Check if author_id or category_id is provided in the request
-        if (!empty($this->author_id) && !empty($this->category_id)) {
-            $query .= ' WHERE q.author_id = ? AND q.category_id = ?';
+        if (!empty($this->author_id)) {
+            $where[] = 'q.author_id = ?';
             $bindings[] = $this->author_id;
-            $bindings[] = $this->category_id;
-        } elseif (!empty($this->author_id)) {
-            $query .= ' WHERE q.author_id = ?';
-            $bindings[] = $this->author_id;
-        } elseif (!empty($this->category_id)) {
-            $query .= ' WHERE q.category_id = ?';
+        }
+    
+        if (!empty($this->category_id)) {
+            $where[] = 'q.category_id = ?';
             $bindings[] = $this->category_id;
         }
     
-        // Prepare the query
+        if (!empty($where)) {
+            $query .= ' WHERE ' . implode(' AND ', $where);
+        }
+    
         $stmt = $this->conn->prepare($query);
     
-        // Bind parameters if bindings exist
         if (!empty($bindings)) {
             $stmt->execute($bindings);
         } else {
-            // Execute the query without parameters
             $stmt->execute();
         }
     
-        // Return the statement
         return $stmt;
     }    
 
