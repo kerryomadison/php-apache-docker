@@ -63,17 +63,23 @@ class Quote {
     }
     
 
-    // In Quote.php
     public function read_single() {
-    $query = 'SELECT id, quote, author, category FROM quotes WHERE id = :id';
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':id', $this->id);
-    $stmt->execute();
-
-    // Fetch quote as an associative array
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    return $row; // Return the fetched quote
+        // Prepare the query
+        $query = 'SELECT id, quote FROM ' . $this->table_name . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+    
+        // Bind the ID parameter
+        $stmt->bindParam(':id', $this->id);
+    
+        // Execute the query
+        $stmt->execute();
+    
+        // Check if a quote was found
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return false;
+        }
     }
 
     
