@@ -7,30 +7,30 @@ try {
     // Create a new instance of the Database class
     $database = new Database();
     $pdo = $database->connect();
-    
 
     // Instantiate quote object
     $quote = new Quote($pdo);
 
-    // Handle possible inputted Foreign Keys | Will assign NULL if not inputted.
-    $quote->author_id = isset($_GET['author_id']) ? $_GET['author_id'] : null;
-    $quote->category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
+    // Check if the quote ID is provided in the request
+    if (isset($_GET['id'])) {
+        $quote_id = $_GET['id'];
 
-    // Quote read query
-    $result = $quote->read();
+        // Set the quote ID
+        $quote->id = $quote_id;
 
-    // Get row count of returned quotes
-    $num = $result->rowCount();
+        // Read single quote
+        $result = $quote->read_single();
 
-    if ($num > 0) {
-        $quotes_array = array();
-
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            // Fetch author and category details based on author_id and category_id
-            $author_id = $row['author_id'];
-            $category_id = $row['category_id'];
+        if ($result === false) {
+            // No quote found
+            http_response_code(404); // Not Found
+            echo json_encode(array("message" => "No Quote Found"));
+        } else {
+            // Quote found, return the quote as a JSON response
+            $quote_data = $result->fetch(PDO::FETCH_ASSOC);
 
             // Fetch author details
+            $author_id = $quote_data['author_id'];
             $author_query = "SELECT author FROM authors WHERE id = :author_id";
             $author_stmt = $pdo->prepare($author_query);
             $author_stmt->bindParam(':author_id', $author_id);
@@ -39,6 +39,7 @@ try {
             $author = $author_row['author'];
 
             // Fetch category details
+            $category_id = $quote_data['category_id'];
             $category_query = "SELECT category FROM categories WHERE id = :category_id";
             $category_stmt = $pdo->prepare($category_query);
             $category_stmt->bindParam(':category_id', $category_id);
@@ -46,27 +47,19 @@ try {
             $category_row = $category_stmt->fetch(PDO::FETCH_ASSOC);
             $category = $category_row['category'];
 
-            $single_quote = array(
-                'id' => $row['id'],
-                'quote' => $row['quote'],
-                'author' => $author,
-                'category' => $category
-            );
+            $quote_data['author'] = $author;
+            $quote_data['category'] = $category;
 
-            // Store item for results
-            array_push($quotes_array, $single_quote);
+            echo json_encode($quote_data);
         }
-
-        http_response_code(200); // OK
-        echo json_encode($quotes_array);
     } else {
-        // No quotes found
-        http_response_code(404); // Not Found
-        echo json_encode(array('message' => 'No Quotes Found'));
+        // Quote ID not provided
+        http_response_code(400); // Bad Request
+        echo json_encode(array("message" => "Missing quote ID."));
     }
 } catch (PDOException $e) {
     // Return an error response if an exception occurred
     http_response_code(500); // Internal Server Error
-    echo json_encode(array('message' => 'Error reading quotes: ' . $e->getMessage()));
+    echo json_encode(array("message" => "Error reading quote: " . $e->getMessage()));
 }
 ?>
