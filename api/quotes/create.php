@@ -41,5 +41,3 @@ try {
     echo json_encode(array("message" => "Error creating quote: " . $e->getMessage()));
 }
 ?>
-
-
