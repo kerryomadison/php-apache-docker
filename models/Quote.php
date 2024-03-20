@@ -13,21 +13,30 @@ class Quote {
     }
 
     public function create() {
+        // Make sure quote, author_id, and category_id are set
+        if (empty($this->quote) || empty($this->author_id) || empty($this->category_id)) {
+            throw new Exception("Invalid input data.");
+        }
+    
+        // Create query
         $query = "INSERT INTO " . $this->table_name . " (quote, author_id, category_id) VALUES (:quote, :author_id, :category_id)";
         $stmt = $this->conn->prepare($query);
-
+    
+        // Bind parameters
         $stmt->bindParam(':quote', $this->quote);
         $stmt->bindParam(':author_id', $this->author_id);
         $stmt->bindParam(':category_id', $this->category_id);
-
+    
+        // Execute query
         if ($stmt->execute()) {
+            // Get the ID of the newly inserted quote
+            $this->id = $this->conn->lastInsertId();
             return true;
         }
-
-        throw new Exception("Error creating quote: " . $stmt->error);
-
-        return false;
+    
+        throw new Exception("Error creating quote.");
     }
+    
 
     public function read() {
         $query = 'SELECT q.id, q.quote, a.author, c.category FROM ' . $this->table_name . ' q';
