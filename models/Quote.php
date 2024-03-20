@@ -69,8 +69,14 @@ class Quote {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
+    
+        if ($stmt->rowCount() == 0) {
+            return false; // No quote found
+        }
+    
         return $stmt;
     }
+    
 
     public function update() {
         $query = "UPDATE " . $this->table_name . " SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id";

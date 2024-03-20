@@ -1,34 +1,32 @@
 <?php
-// Include Database.php
-include_once '../../config/Database.php';
+// Include Quote.php
+include_once '../config/Database.php';
 include_once '../../models/Quote.php';
 
-// Check if the category ID is provided in the request
+// Check if the quote ID is provided in the request
 if (isset($_GET['id'])) {
-    $category_id = $_GET['id'];
+    $quote_id = $_GET['id'];
 
     try {
         // Create a new instance of the Database class
         $database = new Database();
         $pdo = $database->connect();
 
-        // Instantiate quote object
+        // Instantiate Quote object
         $quote = new Quote($pdo);
+        $quote->id = $quote_id;
 
-        // Set the category_id for the quote object
-        $quote->category_id = $category_id;
-
-        // Call the read_single method
+        // Read single quote
         $result = $quote->read_single();
 
-        // Check if the quote was found
-        if ($result) {
-            // Return the quote as a JSON response
-            echo json_encode($result);
-        } else {
-            // Quote not found
+        if ($result === false) {
+            // No quote found
             http_response_code(404); // Not Found
-            echo json_encode(array("message" => "Quote not found."));
+            echo json_encode(array("message" => "No Quotes Found"));
+        } else {
+            // Quote found, return the quote as a JSON response
+            $quote_data = $result->fetch(PDO::FETCH_ASSOC);
+            echo json_encode($quote_data);
         }
     } catch (PDOException $e) {
         // Return an error response if an exception occurred
@@ -36,11 +34,11 @@ if (isset($_GET['id'])) {
         echo json_encode(array("message" => "Error reading quote: " . $e->getMessage()));
     }
 } else {
-    // Category ID not provided
+    // Quote ID not provided
     http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Missing category ID."));
+    echo json_encode(array("message" => "Missing quote ID."));
 }
-
 ?>
+
 
 
