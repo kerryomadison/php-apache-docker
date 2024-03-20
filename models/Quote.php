@@ -13,58 +13,24 @@ class Quote {
     }
 
     public function create() {
-        // Make sure quote, author_id, and category_id are set
-        if (empty($this->quote) || empty($this->author_id) || empty($this->category_id)) {
-            throw new Exception("Invalid input data. Missing required parameters.");
-        }
-
-        // Check if author_id exists
-        if (!$this->authorExists($this->author_id)) {
-            throw new Exception("author_id Not Found.");
-        }
-
-        // Check if category_id exists
-        if (!$this->categoryExists($this->category_id)) {
-            throw new Exception("category_id Not Found.");
-        }
-
         // Create query
         $query = "INSERT INTO " . $this->table_name . " (quote, author_id, category_id) VALUES (:quote, :author_id, :category_id)";
         $stmt = $this->conn->prepare($query);
-
+    
         // Bind parameters
         $stmt->bindParam(':quote', $this->quote);
         $stmt->bindParam(':author_id', $this->author_id);
         $stmt->bindParam(':category_id', $this->category_id);
-
+    
         // Execute query
-        if ($stmt->execute()) {
-            // Get the ID of the newly inserted quote
-            $this->id = $this->conn->lastInsertId();
-            return array("id" => $this->id, "quote" => $this->quote, "author_id" => $this->author_id, "category_id" => $this->category_id);
-        }
-
-        throw new Exception("Error creating quote.");
-    }
-    
-    private function authorExists($author_id) {
-        $query = "SELECT id FROM authors WHERE id = :author_id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':author_id', $author_id);
         $stmt->execute();
-        return $stmt->rowCount() > 0;
+    
+        // Get the ID of the newly inserted quote
+        $this->id = $this->conn->lastInsertId();
+    
+        return true;
     }
-    
-    private function categoryExists($category_id) {
-        $query = "SELECT id FROM categories WHERE id = :category_id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':category_id', $category_id);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
-    }
-    
-    
-
+        
     public function read() {
         $query = 'SELECT q.id, q.quote, a.author, c.category FROM ' . $this->table_name . ' q';
         $query .= ' LEFT JOIN authors a ON q.author_id = a.id';

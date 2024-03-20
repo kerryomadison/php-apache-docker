@@ -15,7 +15,7 @@ $data = json_decode(file_get_contents("php://input"));
 if (empty($data->quote) || strlen($data->quote) > 255 || empty($data->author_id) || empty($data->category_id)) {
     // Return an error response indicating that the input data is invalid
     http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Invalid input data. Missing required parameters."));
+    echo json_encode(array("message" => "Missing Required parameters"));
     exit;
 }
 
