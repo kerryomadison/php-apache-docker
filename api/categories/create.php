@@ -43,5 +43,3 @@ try {
     echo json_encode(array("message" => "Error creating category: " . $e->getMessage()));
 }
 ?>
-
-

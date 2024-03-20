@@ -7,9 +7,6 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
-    // Set JSON content type header
-    $database->setJsonContentType();
-
     // Prepare and execute a SQL statement to select all authors from the database
     $stmt = $pdo->query("SELECT * FROM authors");
 
@@ -30,6 +27,3 @@ try {
     echo json_encode(array("message" => "Error fetching authors: " . $e->getMessage()));
 }
 ?>
-
-
-

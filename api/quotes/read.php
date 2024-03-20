@@ -8,9 +8,7 @@ try {
     $database = new Database();
     $pdo = $database->connect();
     
-    // Set JSON content type header
-    $database->setJsonContentType();
-    
+
     // Instantiate quote object
     $quote = new Quote($pdo);
 
@@ -72,10 +70,3 @@ try {
     echo json_encode(array('message' => 'Error reading quotes: ' . $e->getMessage()));
 }
 ?>
-
-
-
-
-
-
-

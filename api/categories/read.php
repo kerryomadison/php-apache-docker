@@ -7,8 +7,6 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
-    // Set JSON content type header
-    $database->setJsonContentType();
     // Prepare and execute a SQL statement to select all categories
     $stmt = $pdo->query("SELECT * FROM categories");
 
@@ -43,6 +41,4 @@ try {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error reading categories: " . $e->getMessage()));
 }
-
 ?>
-

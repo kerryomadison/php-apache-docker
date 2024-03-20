@@ -34,8 +34,4 @@ try {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error fetching author: " . $e->getMessage()));
 }
-
-
-
-
 ?>

@@ -39,6 +39,3 @@ if (isset($_GET['id'])) {
     echo json_encode(array("message" => "Missing quote ID."));
 }
 ?>
-
-
-

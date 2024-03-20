@@ -36,4 +36,3 @@ if (isset($_POST['id']) && isset($_POST['category'])) {
     echo json_encode(array("message" => "Missing category ID or new category name."));
 }
 ?>
-

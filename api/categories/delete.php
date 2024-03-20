@@ -40,4 +40,3 @@ try {
     echo json_encode(array("message" => "Error deleting category: " . $e->getMessage()));
 }
 ?>
-
