@@ -16,6 +16,7 @@ try {
         $authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Return the authors as a JSON response
+        header('Content-Type: application/json');
         echo json_encode($authors);
     } else {
         // No authors found
@@ -28,5 +29,6 @@ try {
     echo json_encode(array("message" => "Error fetching authors: " . $e->getMessage()));
 }
 ?>
+
 
 

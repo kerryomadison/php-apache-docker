@@ -29,6 +29,9 @@ try {
             array_push($categories_arr['data'], $category_item);
         }
 
+        // Set response headers
+        header('Content-Type: application/json');
+
         // Turn to JSON & output
         echo json_encode($categories_arr);
     } else {
@@ -41,5 +44,6 @@ try {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error reading categories: " . $e->getMessage()));
 }
+
 ?>
 
