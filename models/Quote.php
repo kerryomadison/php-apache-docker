@@ -37,12 +37,12 @@ class Quote {
         $where = array();
         $bindings = array();
     
-        if (!empty($this->author_id)) {
+        if (isset($this->author_id) && !empty($this->author_id)) {
             $where[] = 'q.author_id = ?';
             $bindings[] = $this->author_id;
         }
     
-        if (!empty($this->category_id)) {
+        if (isset($this->category_id) && !empty($this->category_id)) {
             $where[] = 'q.category_id = ?';
             $bindings[] = $this->category_id;
         }
@@ -60,7 +60,8 @@ class Quote {
         }
     
         return $stmt;
-    }    
+    }
+    
 
     // In Quote.php
     public function read_single() {
