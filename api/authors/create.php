@@ -12,10 +12,10 @@ include_once '../../models/Author.php';
 // Validate incoming author name
 $data = json_decode(file_get_contents("php://input"));
 
-if (empty($data->author)) {
-    // Return an error response indicating that the author name is missing
+if (empty($data->author) || strlen($data->author) > 50) {
+    // Return an error response indicating that the author name is invalid
     http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Missing Required Parameters. Author name is required."));
+    echo json_encode(array("message" => "Invalid author. Author must be non-empty and less than 50 characters."));
     exit;
 }
 

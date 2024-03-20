@@ -9,7 +9,9 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 include_once '../../config/Database.php'; 
 include_once '../../models/Category.php';
 // Validate incoming category name
-$category_name = isset($_POST['category']) ? $_POST['category'] : '';
+$input_data = json_decode(file_get_contents("php://input"));
+$category_name = isset($input_data->category) ? $input_data->category : '';
+
 if (empty($category_name) || strlen($category_name) > 50) {
     // Return an error response indicating that the category name is invalid
     http_response_code(400); // Bad Request
