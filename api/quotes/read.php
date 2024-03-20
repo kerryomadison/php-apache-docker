@@ -7,7 +7,10 @@ try {
     // Create a new instance of the Database class
     $database = new Database();
     $pdo = $database->connect();
-
+    
+    // Set JSON content type header
+    $database->setJsonContentType();
+    
     // Instantiate quote object
     $quote = new Quote($pdo);
 
@@ -56,8 +59,6 @@ try {
             array_push($quotes_array, $single_quote);
         }
 
-        // Return the quotes as a JSON response
-        header('Content-Type: application/json');
         http_response_code(200); // OK
         echo json_encode($quotes_array);
     } else {

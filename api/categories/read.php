@@ -7,6 +7,8 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
+    // Set JSON content type header
+    $database->setJsonContentType();
     // Prepare and execute a SQL statement to select all categories
     $stmt = $pdo->query("SELECT * FROM categories");
 
@@ -28,9 +30,6 @@ try {
             // Push to "data"
             array_push($categories_arr['data'], $category_item);
         }
-
-        // Set response headers
-        header('Content-Type: application/json');
 
         // Turn to JSON & output
         echo json_encode($categories_arr);

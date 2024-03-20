@@ -33,7 +33,12 @@ class Database {
             }
         }
     }
-}
 
+    // Set JSON content type header
+    public function setJsonContentType() {
+        header('Content-Type: application/json');
+    }
+}
 ?>
+
 

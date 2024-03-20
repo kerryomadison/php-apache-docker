@@ -7,6 +7,9 @@ try {
     $database = new Database();
     $pdo = $database->connect();
 
+    // Set JSON content type header
+    $database->setJsonContentType();
+
     // Prepare and execute a SQL statement to select all authors from the database
     $stmt = $pdo->query("SELECT * FROM authors");
 
@@ -15,8 +18,6 @@ try {
         // Fetch all authors as an associative array
         $authors = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Return the authors as a JSON response
-        header('Content-Type: application/json');
         echo json_encode($authors);
     } else {
         // No authors found
