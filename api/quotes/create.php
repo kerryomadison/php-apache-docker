@@ -15,7 +15,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (empty($data->quote) || strlen($data->quote) > 255 || empty($data->author_id) || empty($data->category_id)) {
     // Return an error response indicating that the input data is invalid
-    http_response_code(400); // Bad Request
+    http_response_code(200); // Bad Request
     echo json_encode(array("message" => "Missing Required Parameters"));
     exit;
 }
@@ -29,7 +29,7 @@ $stmt->bindParam(':author_id', $data->author_id);
 $stmt->execute();
 if ($stmt->rowCount() === 0) {
     // Return 'author_id Not Found' message
-    http_response_code(400); // Bad Request
+    http_response_code(200); // Bad Request
     echo json_encode(array('message' => 'author_id Not Found'));
     exit;
 }
@@ -39,7 +39,7 @@ $stmt->bindParam(':category_id', $data->category_id);
 $stmt->execute();
 if ($stmt->rowCount() === 0) {
     // Return 'category_id Not Found' message
-    http_response_code(400); // Bad Request
+    http_response_code(200); // Bad Request
     echo json_encode(array('message' => 'category_id Not Found'));
     exit;
 }
