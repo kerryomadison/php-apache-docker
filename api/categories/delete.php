@@ -33,14 +33,16 @@ try {
     $stmt = $pdo->prepare("DELETE FROM categories WHERE id = :id");
     $stmt->bindParam(':id', $category_id);
 
-    if ($stmt->execute()) {
-        // Return a success response with the ID of the deleted category
+    // Check if the category was deleted
+    if ($stmt->rowCount() > 0) {
+        // Category deleted successfully
         echo json_encode(array("id" => $category_id, "message" => "Category deleted successfully."));
     } else {
-        // Return an error response if the deletion failed
-        http_response_code(500); // Internal Server Error
-        echo json_encode(array("message" => "Unable to delete category."));
+        // Category not found or not deleted
+        http_response_code(200); // Not Found
+        echo json_encode(array("message" => "No Categories Found"));
     }
+
 } catch (PDOException $e) {
     // Return an error response if an exception occurred
     http_response_code(500); // Internal Server Error
