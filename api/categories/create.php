@@ -45,8 +45,9 @@ try {
     // Get the ID of the newly created category
     $category_id = $pdo->lastInsertId();
 
-    // Return a success response with the ID and category name of the newly created category
-    echo json_encode(array("id" => $category_id, "category" => $category_name, "message" => "Category created successfully."));
+   // Return a success response with the ID and category name of the newly created category
+    echo json_encode(array("id" => $category_id, "category" => $category_name));
+
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error creating category: " . $e->getMessage()));

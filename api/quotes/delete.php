@@ -28,8 +28,8 @@ if (isset($_POST['id'])) {
             echo json_encode(array("message" => "Quote deleted successfully."));
         } else {
             // Quote not found or not deleted
-            http_response_code(404); // Not Found
-            echo json_encode(array("message" => "Quote not found or not deleted."));
+            http_response_code(200); // Not Found
+            echo json_encode(array("message" => "No Quotes Found'"));
         }
     } catch (PDOException $e) {
         http_response_code(500); // Internal Server Error
