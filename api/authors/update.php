@@ -31,8 +31,8 @@ if (!empty($data->author) && strlen($data->author) <= 50) {
             http_response_code(200); // OK
             echo json_encode(array("message" => "Author updated successfully."));
         } else {
-            http_response_code(500); // Internal Server Error
-            echo json_encode(array("message" => "Unable to update author."));
+            http_response_code(200); // Internal Server Error
+            echo json_encode(array("message" => "Missing Required Parameters"));
         }
     } catch (PDOException $e) {
         http_response_code(500); // Internal Server Error

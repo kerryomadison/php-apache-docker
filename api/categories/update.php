@@ -28,8 +28,8 @@ if (isset($_POST['id']) && isset($_POST['category'])) {
             echo json_encode(array("message" => "Category updated successfully."));
         } else {
             // Category not found or not updated
-            http_response_code(404); // Not Found
-            echo json_encode(array("message" => "Category not found or not updated."));
+            http_response_code(200); // Not Found
+            echo json_encode(array("message" => "Missing Required Parameters'"));
         }
     } catch (PDOException $e) {
         // Return an error response if an exception occurred

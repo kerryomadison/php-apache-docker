@@ -25,8 +25,8 @@ $author_id = isset($input_data->author_id) ? $input_data->author_id : null;
 $category_id = isset($input_data->category_id) ? $input_data->category_id : null;
 
 if (empty($quote_text) || strlen($quote_text) > 255 || !$author_id || !$category_id) {
-    http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Invalid data."));
+    http_response_code(200); // Bad Request
+    echo json_encode(array("message" => "Missing Required Parameters"));
     exit;
 }
 
@@ -68,8 +68,8 @@ try {
         http_response_code(200); // OK
         echo json_encode(array("message" => "Quote updated successfully."));
     } else {
-        http_response_code(404); // Not Found
-        echo json_encode(array("message" => "Quote not found."));
+        http_response_code(200); // Not Found
+        echo json_encode(array("message" => "No Quotes Found"));
     }
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
