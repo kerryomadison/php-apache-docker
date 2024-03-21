@@ -8,8 +8,11 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 // Include Database.php
 include_once '../../config/Database.php'; 
 include_once '../../models/Quote.php';
+
 // Get the quote ID from the request
-$quote_id = isset($_POST['id']) ? $_POST['id'] : null;
+$input_data = json_decode(file_get_contents("php://input"));
+$quote_id = isset($input_data->id) ? $input_data->id : null;
+
 if (!$quote_id) {
     http_response_code(400); // Bad Request
     echo json_encode(array("message" => "Missing quote ID."));
@@ -17,9 +20,9 @@ if (!$quote_id) {
 }
 
 // Get the updated quote and author data from the request
-$quote_text = isset($_POST['quote']) ? $_POST['quote'] : '';
-$author_id = isset($_POST['author_id']) ? $_POST['author_id'] : null;
-$category_id = isset($_POST['category_id']) ? $_POST['category_id'] : null;
+$quote_text = isset($input_data->quote) ? $input_data->quote : '';
+$author_id = isset($input_data->author_id) ? $input_data->author_id : null;
+$category_id = isset($input_data->category_id) ? $input_data->category_id : null;
 
 if (empty($quote_text) || strlen($quote_text) > 255 || !$author_id || !$category_id) {
     http_response_code(400); // Bad Request
@@ -27,11 +30,31 @@ if (empty($quote_text) || strlen($quote_text) > 255 || !$author_id || !$category
     exit;
 }
 
-try {
-    // Create a new instance of the Database class
-    $database = new Database();
-    $pdo = $database->connect();
+// Check if author_id or category_id is not found
+$database = new Database();
+$pdo = $database->connect();
 
+$stmt = $pdo->prepare("SELECT id FROM authors WHERE id = :author_id");
+$stmt->bindParam(':author_id', $author_id);
+$stmt->execute();
+if ($stmt->rowCount() === 0) {
+    // Return 'author_id Not Found' message
+    http_response_code(200); // Bad Request
+    echo json_encode(array('message' => 'author_id Not Found'));
+    exit;
+}
+
+$stmt = $pdo->prepare("SELECT id FROM categories WHERE id = :category_id");
+$stmt->bindParam(':category_id', $category_id);
+$stmt->execute();
+if ($stmt->rowCount() === 0) {
+    // Return 'category_id Not Found' message
+    http_response_code(200); // Bad Request
+    echo json_encode(array('message' => 'category_id Not Found'));
+    exit;
+}
+
+try {
     // Prepare and execute a SQL statement to update the quote
     $stmt = $pdo->prepare("UPDATE quotes SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id");
     $stmt->bindParam(':quote', $quote_text);

@@ -38,7 +38,7 @@ if (isset($_POST['id']) && isset($_POST['category'])) {
     }
 } else {
     // Category ID or new category name not provided
-    http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Missing category ID or new category name."));
+    http_response_code(200);
+    echo json_encode(array("message" => "Missing Required Parameters"));
 }
 ?>
