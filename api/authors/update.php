@@ -29,12 +29,11 @@ if (!empty($data->author) && strlen($data->author) <= 50) {
         $stmt->bindParam(':id', $author_id);
 
         if ($stmt->execute()) {
-            // Fetch the updated author from the database
+            // Return the updated author
             $stmt_fetch = $pdo->prepare("SELECT id, author FROM authors WHERE id = ?");
             $stmt_fetch->execute([$author_id]);
             $updated_author = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
 
-            // Return the updated author
             echo json_encode($updated_author);
         } else {
             http_response_code(500); // Internal Server Error
