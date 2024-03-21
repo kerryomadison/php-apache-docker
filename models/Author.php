@@ -113,9 +113,6 @@ class Author {
             throw new Exception('Error updating author: ' . $e->getMessage());
         }
     }
-
-    }
-
     // Delete author
     public function delete() {
         try {
