@@ -40,7 +40,7 @@ if (!empty($data->author) && strlen($data->author) <= 50) {
         echo json_encode(array("message" => "Error updating author: " . $e->getMessage()));
     }
 } else {
-    http_response_code(400); // Bad Request
+    http_response_code(200); // Bad Request
     echo json_encode(array("message" => "Missing Required Parameters"));
 }
 ?>
