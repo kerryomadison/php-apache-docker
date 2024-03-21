@@ -100,14 +100,20 @@ class Author {
 
             // Execute query
             if ($stmt->execute()) {
+                // Debug statement
+                echo json_encode(array("message" => "Author updated successfully."));
                 return true;
             } else {
+                // Debug statement
+                echo json_encode(array("message" => "Failed to update author."));
                 return false;
             }
         } catch (PDOException $e) {
             // Handle query execution error
             throw new Exception('Error updating author: ' . $e->getMessage());
         }
+    }
+
     }
 
     // Delete author
@@ -134,5 +140,4 @@ class Author {
         }
     }
 }
-
-
+?>

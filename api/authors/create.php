@@ -14,7 +14,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (empty($data->author) || strlen($data->author) > 50) {
     // Return an error response indicating that the author name is invalid
-    http_response_code(400); // Bad Request
+    http_response_code(200); // Bad Request
     echo json_encode(array("message" => "Missing Required Parameters"));
     exit;
 }
