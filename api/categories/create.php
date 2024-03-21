@@ -15,8 +15,8 @@ $category_name = isset($input_data->category) ? $input_data->category : '';
 
 if (empty($category_name) || strlen($category_name) > 50) {
     // Return an error response indicating that the category name is invalid
-    http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Invalid category name. Category name must be non-empty and less than 50 characters."));
+    http_response_code(200); // Bad Request
+    echo json_encode(array("message" => "Missing Required Parameters"));
     exit;
 }
 
