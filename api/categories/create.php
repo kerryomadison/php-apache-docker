@@ -4,18 +4,19 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
-//pulled from traversy project
+
 // Include Database.php
 include_once '../../config/Database.php'; 
 include_once '../../models/Category.php';
+
 // Validate incoming category name
 $input_data = json_decode(file_get_contents("php://input"));
 $category_name = isset($input_data->category) ? $input_data->category : '';
 
 if (empty($category_name) || strlen($category_name) > 50) {
     // Return an error response indicating that the category name is invalid
-    http_response_code(200); // Bad Request
-    echo json_encode(array("message" => "Missing Required Parameters"));
+    http_response_code(400); // Bad Request
+    echo json_encode(array("message" => "Invalid category name. Category name must be non-empty and less than 50 characters."));
     exit;
 }
 

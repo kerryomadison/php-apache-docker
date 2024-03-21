@@ -14,8 +14,8 @@ $data = json_decode(file_get_contents("php://input"));
 
 if (empty($data->author) || strlen($data->author) > 50) {
     // Return an error response indicating that the author name is invalid
-    http_response_code(200); // Bad Request
-    echo json_encode(array("message" => "Missing Required Parameters"));
+    http_response_code(400); // Bad Request
+    echo json_encode(array("message" => "Invalid author name. Author name must be non-empty and less than 50 characters."));
     exit;
 }
 
@@ -29,7 +29,11 @@ try {
     $stmt->bindParam(':author', $data->author);
     $stmt->execute();
 
-    echo json_encode(array("message" => "Author created successfully."));
+    // Get the ID of the newly created author
+    $author_id = $pdo->lastInsertId();
+
+    // Return a success response with the ID and author name of the newly created author
+    echo json_encode(array("id" => $author_id, "author" => $data->author, "message" => "Author created successfully."));
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error creating author: " . $e->getMessage()));
