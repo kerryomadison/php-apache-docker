@@ -8,6 +8,7 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 // Include Database.php
 include_once '../../config/Database.php'; 
 include_once '../../models/Author.php';
+
 // Check if the request includes the author ID
 $author_id = isset($_GET['id']) ? $_GET['id'] : die();
 
@@ -31,8 +32,8 @@ if (!empty($data->author) && strlen($data->author) <= 50) {
             http_response_code(200); // OK
             echo json_encode(array("message" => "Author updated successfully."));
         } else {
-            http_response_code(200); // Internal Server Error
-            echo json_encode(array("message" => "Missing Required Parameters"));
+            http_response_code(500); // Internal Server Error
+            echo json_encode(array("message" => "Error updating author."));
         }
     } catch (PDOException $e) {
         http_response_code(500); // Internal Server Error
@@ -40,6 +41,6 @@ if (!empty($data->author) && strlen($data->author) <= 50) {
     }
 } else {
     http_response_code(400); // Bad Request
-    echo json_encode(array("message" => "Invalid author name."));
+    echo json_encode(array("message" => "Missing Required Parameters"));
 }
 ?>
