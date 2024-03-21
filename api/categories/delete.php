@@ -25,7 +25,7 @@ try {
     if ($stmt_check->rowCount() == 0) {
         // Category does not exist, return an error response
         http_response_code(404); // Not Found
-        echo json_encode(array("message" => "Category not found."));
+        echo json_encode(array("id" => $category_id));
         exit;
     }
 
