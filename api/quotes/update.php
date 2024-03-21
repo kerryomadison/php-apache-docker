@@ -55,7 +55,7 @@ if ($stmt->rowCount() === 0) {
 }
 
 try {
-   // Prepare and execute a SQL statement to update the quote
+    // Prepare and execute a SQL statement to update the quote
     $stmt = $pdo->prepare("UPDATE quotes SET quote = :quote, author_id = :author_id, category_id = :category_id WHERE id = :id");
     $stmt->bindParam(':quote', $quote_text);
     $stmt->bindParam(':author_id', $author_id);
@@ -63,18 +63,24 @@ try {
     $stmt->bindParam(':id', $quote_id);
 
     if ($stmt->execute()) {
-        // Fetch the updated quote from the database
-        $stmt_fetch = $pdo->prepare("SELECT id, quote, author_id, category_id FROM quotes WHERE id = ?");
-        $stmt_fetch->execute([$quote_id]);
-        $updated_quote = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
+        // Check if any rows were affected
+        if ($stmt->rowCount() > 0) {
+            // Fetch the updated quote from the database
+            $stmt_fetch = $pdo->prepare("SELECT id, quote, author_id, category_id FROM quotes WHERE id = ?");
+            $stmt_fetch->execute([$quote_id]);
+            $updated_quote = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
 
-        // Return the updated quote
-        echo json_encode($updated_quote);
+            // Return the updated quote
+            echo json_encode($updated_quote);
+        } else {
+            // No quotes found
+            http_response_code(200); // OK
+            echo json_encode(array("message" => "No Quotes Found"));
+        }
     } else {
         http_response_code(500); // Internal Server Error
         echo json_encode(array("message" => "Error updating quote."));
-}
-
+    }
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error
     echo json_encode(array("message" => "Error updating quote: " . $e->getMessage()));
