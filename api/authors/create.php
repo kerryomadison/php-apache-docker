@@ -33,7 +33,7 @@ try {
     $author_id = $pdo->lastInsertId();
 
     // Return a success response with the ID and author name of the newly created author
-    $response = array("id" => $author_id, "author" => $data->author, "message" => "Author created successfully.");
+    $response = array("id" => $author_id, "author" => $data->author);
     echo json_encode($response);
 } catch (PDOException $e) {
     http_response_code(500); // Internal Server Error

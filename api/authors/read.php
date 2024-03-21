@@ -22,7 +22,7 @@ try {
         echo json_encode($authors);
     } else {
         // No authors found
-        http_response_code(404); // Not Found
+        http_response_code(200); // Not Found
         echo json_encode(array("message" => "No authors found."));
     }
 } catch (PDOException $e) {
