@@ -11,7 +11,7 @@ include_once '../../models/Category.php';
 
 // Check if the category ID and new category name are provided in the request
 if (!isset($_POST['id']) || !isset($_POST['category'])) {
-    http_response_code(200);
+    http_response_code(200); // Bad Request
     echo json_encode(array("message" => "Missing Required Parameters"));
     exit;
 }
@@ -30,8 +30,13 @@ try {
 
     // Check if the category was updated
     if ($stmt->rowCount() > 0) {
-        // Category updated successfully
-        echo json_encode(array("message" => "Category updated successfully."));
+        // Fetch the updated category from the database
+        $stmt_fetch = $pdo->prepare("SELECT id, category FROM categories WHERE id = ?");
+        $stmt_fetch->execute([$category_id]);
+        $updated_category = $stmt_fetch->fetch(PDO::FETCH_ASSOC);
+
+        // Return the updated category
+        echo json_encode($updated_category);
     } else {
         // Category not found or not updated
         http_response_code(200); // Not Found
